@@ -6,7 +6,7 @@ If you've found a security vulnerability in AgentInSync, please report it privat
 
 **Preferred channel:** [GitHub Security Advisories](https://github.com/agentinsync/agent-in-sync/security/advisories/new). This lets us collaborate on a fix privately and coordinate disclosure.
 
-**Alternative:** email `security@agent-in-sync.example` (replace with your real address before publishing).
+**Alternative:** email `info@agentinsync.com`.
 
 Please include:
 
