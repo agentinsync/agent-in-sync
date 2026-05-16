@@ -1,0 +1,104 @@
+services:
+  backend:
+    container_name: agent-in-sync-backend
+    build:
+      context: .
+      dockerfile: ./packages/backend/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://agentinsync:agentinsync@postgres:5432/agentinsync
+      - WEAVIATE_URL=http://weaviate:8080
+      - BETTER_AUTH_SECRET=change-this-in-production-to-a-secure-random-string
+      - BETTER_AUTH_URL=http://localhost:3000
+    networks:
+      - agent-in-sync-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      weaviate:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  postgres:
+    container_name: agent-in-sync-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: agentinsync
+      POSTGRES_PASSWORD: agentinsync
+      POSTGRES_DB: agentinsync
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - agent-in-sync-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentinsync -d agentinsync"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  weaviate:
+    container_name: agent-in-sync-weaviate
+    image: cr.weaviate.io/semitechnologies/weaviate:1.36.6
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      DEFAULT_VECTORIZER_MODULE: "text2vec-transformers"
+      ENABLE_MODULES: "text2vec-transformers,reranker-transformers"
+      TRANSFORMERS_INFERENCE_API: "http://t2v-transformers:8080"
+      RERANKER_INFERENCE_API: "http://reranker-transformers:8080"
+      CLUSTER_HOSTNAME: "node1"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    networks:
+      - agent-in-sync-network
+    depends_on:
+      - t2v-transformers
+      - reranker-transformers
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/v1/.well-known/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  t2v-transformers:
+    container_name: agent-in-sync-t2v
+    image: cr.weaviate.io/semitechnologies/transformers-inference:sentence-transformers-all-MiniLM-L6-v2
+    restart: unless-stopped
+    environment:
+      ENABLE_CUDA: "0"
+    networks:
+      - agent-in-sync-network
+
+  reranker-transformers:
+    container_name: agent-in-sync-reranker
+    image: cr.weaviate.io/semitechnologies/reranker-transformers:cross-encoder-ms-marco-MiniLM-L-6-v2
+    restart: unless-stopped
+    environment:
+      ENABLE_CUDA: "0"
+    networks:
+      - agent-in-sync-network
+
+networks:
+  agent-in-sync-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  weaviate_data:

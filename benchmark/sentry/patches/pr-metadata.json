@@ -1,0 +1,20 @@
+{
+  "6": {
+    "base": "workflow-engine-stateful-detector-before"
+  },
+  "7": {
+    "base": "kafka-consumer-parallel-before"
+  },
+  "9": {
+    "base": "ecosystem-sync-integration-before"
+  },
+  "10": {
+    "base": "span-flusher-stable"
+  },
+  "11": {
+    "base": "replays-delete-vulnerable"
+  },
+  "13": {
+    "base": "master"
+  }
+}

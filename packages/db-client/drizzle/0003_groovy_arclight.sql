@@ -1,0 +1,1 @@
+ALTER TABLE "share_requests" ADD COLUMN "approval_reason" text;

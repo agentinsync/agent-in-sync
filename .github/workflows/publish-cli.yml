@@ -1,0 +1,49 @@
+name: Publish CLI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/cli/**'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check if version changed
+        id: version
+        run: |
+          LOCAL=$(node -p "require('./packages/cli/package.json').version")
+          NPM=$(npm view @agent-in-sync/cli version 2>/dev/null || echo "0.0.0")
+          echo "local=$LOCAL" >> "$GITHUB_OUTPUT"
+          echo "npm=$NPM" >> "$GITHUB_OUTPUT"
+          if [ "$LOCAL" != "$NPM" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build
+        if: steps.version.outputs.changed == 'true'
+        run: pnpm --filter @agent-in-sync/cli build
+
+      - name: Publish
+        if: steps.version.outputs.changed == 'true'
+        run: pnpm --filter @agent-in-sync/cli publish --no-git-checks --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

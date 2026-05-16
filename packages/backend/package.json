@@ -1,0 +1,61 @@
+{
+  "name": "@agent-in-sync/backend",
+  "version": "0.0.1",
+  "description": "AgentInSync Backend API Server",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./services": "./dist/services/index.js",
+    "./auth": "./dist/auth/api-keys.js",
+    "./weaviate": "./dist/weaviate/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist coverage",
+    "dev": "tsx watch --env-file=../../.env src/index.ts",
+    "lint": "eslint src tests",
+    "lint:fix": "eslint src tests --fix",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
+    "typecheck": "tsc --noEmit",
+    "reindex-weaviate": "tsx --env-file=../../.env src/scripts/reindex-weaviate.ts"
+  },
+  "dependencies": {
+    "@agent-in-sync/db-client": "workspace:*",
+    "@agent-in-sync/shared": "workspace:*",
+    "@axiomhq/js": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.25.0",
+    "@node-saml/node-saml": "^5.0.1",
+    "better-auth": "^1.4.9",
+    "connect-timeout": "^1.9.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "drizzle-orm": "^0.38.3",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.0.0",
+    "lru-cache": "^11.2.7",
+    "weaviate-client": "^3.12.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/connect-timeout": "^1.9.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.7",
+    "@types/supertest": "^6.0.2",
+    "@vitest/coverage-v8": "^2.1.8",
+    "supertest": "^7.0.0",
+    "tsx": "^4.19.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

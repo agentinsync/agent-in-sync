@@ -1,0 +1,61 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+build
+out
+
+# Test coverage
+coverage
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Turborepo
+.turbo
+
+# Docker
+.docker
+
+# Misc
+*.tgz
+.cache
+*.tsbuildinfo
+
+# TanStack Router
+.tanstack/
+
+# Seed exports and cache (generated, contain environment-specific IDs)
+seed-context*.json
+seed-data.sql
+.seed-cache
+.env.production
+
+# Benchmark
+benchmark/__pycache__/
+benchmark/results.csv.lock
+benchmark/runs/
+
+# dev-3.0 local config
+.dev3/config.local.json

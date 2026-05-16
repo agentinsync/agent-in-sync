@@ -1,0 +1,59 @@
+{
+  "name": "@agent-in-sync/cli",
+  "version": "0.0.6",
+  "description": "CLI tool for connecting AgentInSync to your AI coding agents",
+  "type": "module",
+  "bin": {
+    "agent-in-sync": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "content"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "test": "tsx --test src/**/*.test.ts",
+    "test:watch": "tsx --test --watch src/**/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agentinsync/AgentInSync.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/agentinsync/AgentInSync",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "gray-matter": "^4.0.3",
+    "inquirer": "^9.2.23",
+    "open": "^10.1.0",
+    "ora": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "agentinsync",
+    "mcp",
+    "cursor",
+    "claude",
+    "ai",
+    "cli",
+    "coding-agents",
+    "skills",
+    "rules"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,448 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@theme {
+  --color-background: hsl(220 20% 98%);
+  --color-foreground: hsl(220 25% 8%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(220 25% 8%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(220 25% 8%);
+  --color-primary: hsl(220 70% 50%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(220 15% 95%);
+  --color-secondary-foreground: hsl(220 25% 15%);
+  --color-muted: hsl(220 15% 95%);
+  --color-muted-foreground: hsl(220 10% 45%);
+  --color-accent: hsl(24 90% 55%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-destructive: hsl(0 72% 55%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(220 12% 90%);
+  --color-input: hsl(220 12% 90%);
+  --color-ring: hsl(220 70% 50%);
+  --color-success: hsl(152 70% 40%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(38 95% 55%);
+  --color-warning-foreground: hsl(220 25% 8%);
+  --radius-lg: 0.75rem;
+  --radius-md: calc(0.75rem - 2px);
+  --radius-sm: calc(0.75rem - 4px);
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: Georgia, 'Times New Roman', serif;
+
+  --sidebar-collapsed: 60px;
+  --sidebar-expanded: 220px;
+  --color-sidebar-bg: hsl(220 25% 10%);
+  --color-sidebar-foreground: hsl(220 15% 75%);
+  --color-sidebar-active: hsl(220 70% 55%);
+  --color-sidebar-hover: hsl(220 25% 16%);
+  --color-sidebar-border: hsl(220 25% 16%);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+  }
+}
+
+.dark {
+  --color-background: hsl(220 25% 6%);
+  --color-foreground: hsl(220 15% 92%);
+  --color-card: hsl(220 25% 9%);
+  --color-card-foreground: hsl(220 15% 92%);
+  --color-popover: hsl(220 25% 9%);
+  --color-popover-foreground: hsl(220 15% 92%);
+  --color-primary: hsl(220 75% 60%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(220 25% 12%);
+  --color-secondary-foreground: hsl(220 15% 92%);
+  --color-muted: hsl(220 25% 12%);
+  --color-muted-foreground: hsl(220 15% 60%);
+  --color-accent: hsl(24 90% 55%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-destructive: hsl(0 65% 55%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(220 25% 15%);
+  --color-input: hsl(220 25% 15%);
+  --color-ring: hsl(220 75% 60%);
+  --color-success: hsl(152 70% 45%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(38 95% 55%);
+  --color-warning-foreground: hsl(220 25% 8%);
+}
+
+/* Prose styles for markdown rendering */
+.prose {
+  line-height: 1.75;
+}
+.prose h1, .prose h2, .prose h3 {
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.prose h1 { font-size: 1.5rem; }
+.prose h2 { font-size: 1.25rem; }
+.prose h3 { font-size: 1.125rem; }
+.prose p { margin-top: 0.75em; margin-bottom: 0.75em; }
+.prose ul, .prose ol { padding-left: 1.5em; margin-top: 0.5em; margin-bottom: 0.5em; }
+.prose li { margin-top: 0.25em; margin-bottom: 0.25em; }
+.prose blockquote {
+  border-left: 3px solid var(--color-border);
+  padding-left: 1em;
+  color: var(--color-muted-foreground);
+  font-style: italic;
+}
+.prose table { border-collapse: collapse; }
+.prose th, .prose td {
+  border: 1px solid var(--color-border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.prose th { font-weight: 600; background: var(--color-muted); }
+
+/* Marketing page animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(var(--color-primary), 0.3); }
+  50% { box-shadow: 0 0 40px rgba(var(--color-primary), 0.5); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-down {
+  animation: fade-in-down 0.8s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+/* Staggered animations */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+
+/* Grain overlay for texture */
+.grain-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(220 15% 75%);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(220 15% 60%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(220 15% 30%);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(220 15% 40%);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dark .glass {
+  background: rgba(15, 15, 25, 0.7);
+}
+
+/* Safe bottom for mobile tab bar */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ─── Premium marketing animations ─────────────────────────────────────── */
+
+/* Dot-grid hero background */
+.dot-grid {
+  background-image: radial-gradient(circle, hsl(220 70% 50% / 0.13) 1px, transparent 1px);
+  background-size: 30px 30px;
+  mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, black 30%, transparent 100%);
+}
+
+/* Light-beam sweep across terminal card */
+@keyframes beam {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(700%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+.animate-beam {
+  animation: beam 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 2s;
+}
+
+/* Blinking terminal cursor */
+@keyframes blink-cursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.animate-cursor {
+  animation: blink-cursor 1s step-end infinite;
+}
+
+/* Terminal card edge glow */
+@keyframes edge-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px hsl(220 70% 50% / 0.15),
+      0 25px 60px -15px hsl(220 70% 50% / 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px hsl(220 70% 50% / 0.4),
+      0 25px 60px -15px hsl(220 70% 50% / 0.22);
+  }
+}
+.animate-edge-glow {
+  animation: edge-glow 3.5s ease-in-out infinite;
+}
+
+/* Spotlight hover on feature cards — JS sets --x/--y */
+.spotlight-hover {
+  --x: -500px;
+  --y: -500px;
+}
+.spotlight-hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(380px circle at var(--x) var(--y), hsl(220 70% 50% / 0.07), transparent 40%);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
+.spotlight-hover:hover::before {
+  opacity: 1;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-beam,
+  .animate-cursor,
+  .animate-edge-glow,
+  .animate-float,
+  .animate-gradient,
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-cta-ring,
+  .typing-dot {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .card-shimmer::after {
+    animation: none !important;
+  }
+}
+
+/* ─── New premium effects ──────────────────────────────────────────────── */
+
+/* Pulsing ring on primary CTA button */
+@keyframes cta-ring {
+  0% { box-shadow: 0 0 0 0 hsl(220 70% 50% / 0.5); }
+  70% { box-shadow: 0 0 0 14px hsl(220 70% 50% / 0); }
+  100% { box-shadow: 0 0 0 0 hsl(220 70% 50% / 0); }
+}
+.animate-cta-ring {
+  animation: cta-ring 2.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+/* Shimmer sweep for live/updating cards */
+@keyframes card-shimmer {
+  0% { transform: translateX(-200%); }
+  100% { transform: translateX(200%); }
+}
+.card-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.card-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 60%
+  );
+  animation: card-shimmer 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+.dark .card-shimmer::after {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 60%
+  );
+}
+
+/* Typing dots (3 dots indicating live updates) */
+@keyframes typing-bounce {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+.typing-dot {
+  animation: typing-bounce 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ─── Futuristic agent page ────────────────────────────────────────────── */
+
+/* Slow orbital rotation for avatar ring */
+@keyframes orbit {
+  to { transform: rotate(360deg); }
+}
+.animate-orbit {
+  animation: orbit 10s linear infinite;
+}
+
+/* Vertical scan line — moves top-to-bottom over the hero card */
+@keyframes scan-v {
+  0%   { transform: translateY(-4px); opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { transform: translateY(300px); opacity: 0; }
+}
+.animate-scan-v {
+  animation: scan-v 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 1s;
+}
+
+/* Neon border pulse for active issue cards */
+@keyframes neon-pulse {
+  0%, 100% { border-color: hsl(220 70% 50% / 0.2); }
+  50% { border-color: hsl(220 70% 50% / 0.5); }
+}
+.animate-neon-border {
+  animation: neon-pulse 3s ease-in-out infinite;
+}

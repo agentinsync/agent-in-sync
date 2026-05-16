@@ -1,0 +1,101 @@
+[
+  {
+    "id": "S1",
+    "pr": 7,
+    "title": "Message marked complete even if processing fails",
+    "description": "BufferedConsumer marks messages as 'completed' (ack) regardless of whether on_flush actually succeeded. If the flush callback raises an exception, the message is still removed from the buffer, causing silent data loss.",
+    "severity": "critical",
+    "category": "error-handling",
+    "prompt_hint": "Messages silently disappearing from the processing queue after flush errors",
+    "seed_issue_id": "8238d0a8-f115-4b5a-84bf-87f607f3942e"
+  },
+  {
+    "id": "S2",
+    "pr": 7,
+    "title": "queue.Queue has no shutdown method in Python < 3.13",
+    "description": "Code calls queue.Queue.shutdown() which was only added in Python 3.13. Running on Python 3.12 or earlier raises AttributeError, breaking the graceful shutdown path.",
+    "severity": "critical",
+    "category": "compatibility",
+    "prompt_hint": "AttributeError: 'Queue' object has no attribute 'shutdown' during process termination",
+    "seed_issue_id": "fb60d44e-c014-4c7e-a56a-545cc205e1a1"
+  },
+  {
+    "id": "S3",
+    "pr": 13,
+    "title": "Nested dict access without null checks on error_sampling context",
+    "description": "Accessing nested dictionary keys in the error_sampling context without checking for None first. When contexts or error_sampling are absent, the code raises AttributeError.",
+    "severity": "critical",
+    "category": "null-safety",
+    "prompt_hint": "AttributeError: 'NoneType' object has no attribute 'get' in error sampling pipeline"
+  },
+  {
+    "id": "S4",
+    "pr": 9,
+    "title": "timezone.now() called at class definition time instead of runtime",
+    "description": "A default value uses timezone.now() at class definition time, meaning the timestamp is fixed when the module loads rather than being evaluated fresh for each instance.",
+    "severity": "high",
+    "category": "logic-error",
+    "prompt_hint": "Scheduled tasks all share the same stale timestamp from server startup",
+    "seed_issue_id": "c6753571-810a-4ee6-a4ae-d034cf34c246"
+  },
+  {
+    "id": "S5",
+    "pr": 9,
+    "title": "datetime in Celery kwargs fails JSON serialization",
+    "description": "Passing a datetime object directly in Celery task kwargs causes JSON serialization failures since datetime is not JSON-serializable by default.",
+    "severity": "critical",
+    "category": "serialization",
+    "prompt_hint": "TypeError: Object of type datetime is not JSON serializable when dispatching Celery tasks",
+    "seed_issue_id": "e564d07a-11c1-4e05-980c-67317a0d73c5"
+  },
+  {
+    "id": "S6",
+    "pr": 10,
+    "title": "kill() without checking if process is alive",
+    "description": "The code calls os.kill() on a process without first verifying it is still running. If the process already exited, this raises ProcessLookupError or OSError.",
+    "severity": "high",
+    "category": "race-condition",
+    "prompt_hint": "ProcessLookupError: [Errno 3] No such process during shutdown sequence",
+    "seed_issue_id": "c1e1bf07-c43e-4fce-9e1d-a1c7adb8fb60"
+  },
+  {
+    "id": "S7",
+    "pr": 10,
+    "title": "Shutdown flusher processes not terminated",
+    "description": "During shutdown, flusher child processes are not properly terminated, leaving orphaned processes that hold resources and prevent clean exit.",
+    "severity": "high",
+    "category": "resource-leak",
+    "prompt_hint": "Orphaned flusher processes still running after main process exits",
+    "seed_issue_id": "7f6b20e1-125f-4bf7-9e4e-4d7f6f23de1a"
+  },
+  {
+    "id": "S8",
+    "pr": 6,
+    "title": "Abstract class missing abstract method implementations",
+    "description": "A concrete class inherits from an abstract base class but fails to implement required abstract methods, causing TypeError at instantiation.",
+    "severity": "critical",
+    "category": "type-error",
+    "prompt_hint": "TypeError: Can't instantiate abstract class with abstract methods",
+    "seed_issue_id": "4662dca5-7908-4e09-81a5-cb46e8bc118f"
+  },
+  {
+    "id": "S9",
+    "pr": 6,
+    "title": "DetectorPriorityLevel to PriorityLevel enum mismatch",
+    "description": "Code maps between two enum types (DetectorPriorityLevel and PriorityLevel) but the mapping is incomplete or uses wrong values, causing KeyError or incorrect priority assignment.",
+    "severity": "critical",
+    "category": "enum-mismatch",
+    "prompt_hint": "KeyError or wrong priority level when converting between detector and issue priorities",
+    "seed_issue_id": "7eb7f8e7-79c6-4048-9933-8586db912692"
+  },
+  {
+    "id": "S10",
+    "pr": 11,
+    "title": "_truncate_title called on wrong class",
+    "description": "The _truncate_title method is called on an instance that doesn't have it (wrong class or missing inheritance), causing AttributeError.",
+    "severity": "high",
+    "category": "method-resolution",
+    "prompt_hint": "AttributeError: object has no attribute '_truncate_title' when creating issue titles",
+    "seed_issue_id": "7321394c-12b0-4779-9d2e-43fe2b7ec812"
+  }
+]

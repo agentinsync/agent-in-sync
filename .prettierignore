@@ -1,0 +1,11 @@
+node_modules
+dist
+build
+out
+coverage
+pnpm-lock.yaml
+**/routeTree.gen.ts
+.claude/
+.dev3/
+benchmark/sentry/runs/
+benchmark/sentry/.repo/

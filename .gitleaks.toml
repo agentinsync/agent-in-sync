@@ -1,0 +1,18 @@
+title = "AgentInSync gitleaks allowlist"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allow placeholder API keys in docs, tests, and example snippets"
+paths = [
+  # Cloned third-party repo used only by benchmark scripts; gitignored at runtime.
+  '''benchmark/sentry/\.repo/''',
+]
+regexes = [
+  # Placeholder API keys used in README, design logs, plan docs, and tests.
+  '''ask_your_key''',
+  '''ask_your_key_here''',
+  '''ask_pub_xyz789''',
+  '''ask_prv_abc123''',
+]

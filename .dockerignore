@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+.git
+.gitignore
+.env*
+*.log
+.turbo
+.DS_Store
+README.md
+.github

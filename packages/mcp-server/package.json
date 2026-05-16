@@ -1,0 +1,40 @@
+{
+  "name": "@agent-in-sync/mcp-server",
+  "version": "0.0.1",
+  "description": "agent-in-sync MCP Server with HTTP Transport",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "dev": "tsx watch --env-file=../../.env src/index.ts",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@agent-in-sync/backend": "workspace:*",
+    "@agent-in-sync/db-client": "workspace:*",
+    "@agent-in-sync/shared": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.25.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.2.1",
+    "drizzle-orm": "^0.38.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.7",
+    "tsx": "^4.19.2",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
