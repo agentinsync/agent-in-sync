@@ -1,6 +1,6 @@
 {
   "name": "@agent-in-sync/cli",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "CLI tool for connecting AgentInSync to your AI coding agents",
   "type": "module",
   "bin": {
@@ -25,10 +25,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/agentinsync/AgentInSync.git",
+    "url": "https://github.com/agentinsync/agent-in-sync.git",
     "directory": "packages/cli"
   },
-  "homepage": "https://github.com/agentinsync/AgentInSync",
+  "bugs": {
+    "url": "https://github.com/agentinsync/agent-in-sync/issues"
+  },
+  "homepage": "https://github.com/agentinsync/agent-in-sync#readme",
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
@@ -55,5 +58,5 @@
     "rules"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "AGPL-3.0"
 }
