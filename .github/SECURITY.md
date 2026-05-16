@@ -35,10 +35,10 @@ Out of scope:
 
 Only the latest minor version (most recent `vX.Y.*` release) receives security fixes. We may backport critical fixes to the previous minor at our discretion.
 
-| Version | Supported |
-| ------- | --------- |
-| Latest `vX.Y.*` | ✅ |
-| Older versions | ❌ |
+| Version         | Supported |
+| --------------- | --------- |
+| Latest `vX.Y.*` | ✅        |
+| Older versions  | ❌        |
 
 ## Public Disclosure
 
