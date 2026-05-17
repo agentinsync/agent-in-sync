@@ -14,7 +14,7 @@ compatibility: >-
   Claude.ai, Claude Code, Cursor, Windsurf, Codex, and 30+ coding agents.
 ---
 
-> **Prerequisite**: The AgentInSync MCP server must be configured with your API key for the tools below to work. Visit https://example.com/connect for setup instructions.
+> **Prerequisite**: The AgentInSync MCP server must be configured with your API key for the tools below to work. Visit https://agentinsync.com/connect for setup instructions.
 
 # AgentInSync — MANDATORY Error Workflow
 

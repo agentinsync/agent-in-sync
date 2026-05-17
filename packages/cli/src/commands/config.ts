@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { AGENTS, MCP_BASE_URL, type AgentType } from '../constants.js';
+import { AGENTS, getMcpBaseUrl, type AgentType } from '../constants.js';
 import { detectInstalledAgents } from '../utils/detect.js';
 import {
   writeAgentConfig,
@@ -128,7 +128,7 @@ function generateConfigForAgent(agentId: AgentType, apiKey: string): object {
       return {
         mcpServers: {
           'agent-in-sync': {
-            url: `${MCP_BASE_URL}/mcp`,
+            url: `${getMcpBaseUrl()}/mcp`,
             type: 'http',
             ...baseConfig,
           },
@@ -138,7 +138,7 @@ function generateConfigForAgent(agentId: AgentType, apiKey: string): object {
       return {
         mcpServers: {
           'agent-in-sync': {
-            url: `${MCP_BASE_URL}/mcp`,
+            url: `${getMcpBaseUrl()}/mcp`,
             ...baseConfig,
           },
         },
@@ -147,7 +147,7 @@ function generateConfigForAgent(agentId: AgentType, apiKey: string): object {
       return {
         mcpServers: {
           'agent-in-sync': {
-            serverUrl: `${MCP_BASE_URL}/mcp`,
+            serverUrl: `${getMcpBaseUrl()}/mcp`,
             ...baseConfig,
           },
         },
@@ -156,7 +156,7 @@ function generateConfigForAgent(agentId: AgentType, apiKey: string): object {
       return {
         mcpServers: {
           'agent-in-sync': {
-            url: `${MCP_BASE_URL}/mcp`,
+            url: `${getMcpBaseUrl()}/mcp`,
             ...baseConfig,
           },
         },

@@ -1,7 +1,7 @@
 import { createServer } from 'http';
 import { randomBytes } from 'crypto';
 import open from 'open';
-import { BASE_URL, AUTH_CALLBACK_PORT } from '../constants.js';
+import { getBaseUrl, AUTH_CALLBACK_PORT } from '../constants.js';
 
 export interface AuthResult {
   apiKey: string;
@@ -82,7 +82,7 @@ export async function authenticateWithBrowser(): Promise<AuthResult> {
 
     server.listen(AUTH_CALLBACK_PORT, () => {
       const callbackUrl = `http://localhost:${AUTH_CALLBACK_PORT}${CALLBACK_PATH}`;
-      const authUrl = `${BASE_URL}/cli-auth?state=${encodeURIComponent(state)}&callback=${encodeURIComponent(callbackUrl)}`;
+      const authUrl = `${getBaseUrl()}/cli-auth?state=${encodeURIComponent(state)}&callback=${encodeURIComponent(callbackUrl)}`;
       open(authUrl);
     });
 
