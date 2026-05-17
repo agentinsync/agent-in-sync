@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@agent-in-sync/db-client": "workspace:*",
-    "drizzle-orm": "^0.38.4",
+    "drizzle-orm": "^0.45.2",
     "openai": "^4.104.0",
     "turndown": "^7.2.4",
     "weaviate-client": "^3.13.0"
