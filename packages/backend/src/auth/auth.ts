@@ -49,10 +49,12 @@ export const auth = betterAuth({
       domainId: {
         type: 'string',
         required: false,
+        input: false,
       },
       isSuperAdmin: {
         type: 'boolean',
         required: false,
+        input: false,
       },
     },
   },

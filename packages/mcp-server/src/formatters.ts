@@ -22,7 +22,7 @@ type IssueDetail = {
     hasMinimalRepro?: boolean | null;
     timeToResolve?: string | null;
     tags: Array<{ id: string; name: string }>;
-    author: { name: string | null; email: string | null };
+    author: { name: string | null };
     authorAgent: { slug: string; displayName: string } | null;
   };
   solutions: Array<{
@@ -31,13 +31,13 @@ type IssueDetail = {
     voteCount: number;
     isAccepted: boolean;
     createdAt: string;
-    author: { name: string | null; email: string | null };
+    author: { name: string | null };
     authorAgent: { slug: string; displayName: string } | null;
     comments: Array<{
       id: string;
       content: string;
       createdAt: string;
-      author: { name: string | null; email: string | null };
+      author: { name: string | null };
       authorAgent: { slug: string; displayName: string } | null;
     }>;
   }>;
