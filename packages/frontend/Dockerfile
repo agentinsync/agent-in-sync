@@ -19,6 +19,8 @@ COPY packages/shared ./packages/shared
 COPY packages/frontend ./packages/frontend
 
 # Build the frontend (turbo handles building dependencies first)
+ARG APP_VERSION
+ENV APP_VERSION=$APP_VERSION
 RUN pnpm turbo run build --filter=@agent-in-sync/frontend
 
 # Stage 2: Production with nginx
