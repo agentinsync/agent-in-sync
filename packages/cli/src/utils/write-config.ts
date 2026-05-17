@@ -1,7 +1,7 @@
 import { spawnSync } from 'child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
-import { MCP_BASE_URL, type AgentConfig, type AgentType } from '../constants.js';
+import { getMcpBaseUrl, type AgentConfig, type AgentType } from '../constants.js';
 
 export interface McpServerConfig {
   url?: string;
@@ -23,30 +23,30 @@ function generateAgentInSyncConfig(apiKey: string, agentType: AgentType): McpSer
   switch (agentType) {
     case 'cursor':
       return {
-        url: `${MCP_BASE_URL}/mcp`,
+        url: `${getMcpBaseUrl()}/mcp`,
         type: 'http',
         headers: { 'X-API-Key': apiKey },
       };
     case 'windsurf':
       return {
-        serverUrl: `${MCP_BASE_URL}/mcp`,
+        serverUrl: `${getMcpBaseUrl()}/mcp`,
         headers: { 'X-API-Key': apiKey },
       };
     case 'gemini-cli':
       return {
-        httpUrl: `${MCP_BASE_URL}/mcp`,
+        httpUrl: `${getMcpBaseUrl()}/mcp`,
         headers: { 'X-API-Key': apiKey },
       };
     default:
       return {
-        url: `${MCP_BASE_URL}/mcp`,
+        url: `${getMcpBaseUrl()}/mcp`,
         headers: { 'X-API-Key': apiKey },
       };
   }
 }
 
 export function getClaudeCodeCommand(apiKey: string): string {
-  return `claude mcp add --scope user --transport http agent-in-sync ${MCP_BASE_URL}/mcp --header "X-API-Key: ${apiKey}"`;
+  return `claude mcp add --scope user --transport http agent-in-sync ${getMcpBaseUrl()}/mcp --header "X-API-Key: ${apiKey}"`;
 }
 
 function writeJsonMcpServersConfig(agent: AgentConfig, apiKey: string): void {
@@ -91,7 +91,7 @@ function writeJsonServersConfig(configPath: string, apiKey: string): void {
   const servers = (existing.servers ?? {}) as Record<string, unknown>;
   servers['agent-in-sync'] = {
     type: 'http',
-    url: `${MCP_BASE_URL}/mcp`,
+    url: `${getMcpBaseUrl()}/mcp`,
     headers: { 'X-API-Key': '${input:agent-in-sync-key}' },
   };
   existing.servers = servers;
@@ -130,7 +130,7 @@ function writeTomlConfig(configPath: string, apiKey: string): void {
   }
 
   const sectionHeader = '[mcp_servers.agent-in-sync]';
-  const sectionContent = `${sectionHeader}\nurl = "${MCP_BASE_URL}/mcp"\nhttp_headers = { "X-API-Key" = "${apiKey}" }\n`;
+  const sectionContent = `${sectionHeader}\nurl = "${getMcpBaseUrl()}/mcp"\nhttp_headers = { "X-API-Key" = "${apiKey}" }\n`;
 
   if (existing.includes(sectionHeader)) {
     const start = existing.indexOf(sectionHeader);
@@ -166,7 +166,7 @@ export function writeAgentConfig(agent: AgentConfig, apiKey: string): WriteAgent
             '--transport',
             'http',
             'agent-in-sync',
-            `${MCP_BASE_URL}/mcp`,
+            `${getMcpBaseUrl()}/mcp`,
             '--header',
             `X-API-Key: ${apiKey}`,
           ],

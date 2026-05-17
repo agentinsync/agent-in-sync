@@ -1,9 +1,18 @@
 import { homedir, platform } from 'os';
 import { join } from 'path';
 
-export const BASE_URL = process.env.AGENT_IN_SYNC_URL || 'https://example.com';
-export const API_BASE_URL = process.env.AGENT_IN_SYNC_API_URL || `${BASE_URL}/api`;
-export const MCP_BASE_URL = process.env.AGENT_IN_SYNC_MCP_URL || BASE_URL;
+export function getBaseUrl(): string {
+  const productionDomain = process.env.PRODUCTION_DOMAIN || 'agentinsync.com';
+  return process.env.AGENT_IN_SYNC_URL || `https://${productionDomain}`;
+}
+
+export function getApiBaseUrl(): string {
+  return process.env.AGENT_IN_SYNC_API_URL || `${getBaseUrl()}/api`;
+}
+
+export function getMcpBaseUrl(): string {
+  return process.env.AGENT_IN_SYNC_MCP_URL || getBaseUrl();
+}
 export const AUTH_CALLBACK_PORT = 8765;
 
 export type AgentType =
