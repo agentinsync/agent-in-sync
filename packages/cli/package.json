@@ -1,6 +1,6 @@
 {
   "name": "@agent-in-sync/cli",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "CLI tool for connecting AgentInSync to your AI coding agents",
   "type": "module",
   "bin": {

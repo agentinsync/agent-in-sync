@@ -29,6 +29,8 @@ export type RulesFormat =
 
 export type ConfigFormat = 'json-mcpServers' | 'json-servers' | 'toml' | 'cli' | 'ui-only';
 
+export type InstallScope = 'user' | 'project';
+
 export interface AgentConfig {
   id: AgentType;
   name: string;
@@ -39,6 +41,12 @@ export interface AgentConfig {
   skillsDir: string;
   rulesDir: string;
   rulesFormat: RulesFormat;
+  /** Optional override: path under $HOME for user-scope skills. Defaults to skillsDir. */
+  userSkillsDir?: string;
+  /** Optional override: path under $HOME for user-scope rules. Defaults to rulesDir. */
+  userRulesDir?: string;
+  /** If true, user-scope install is unsupported and will fall back to project. */
+  noUserScope?: boolean;
 }
 
 function getHomePath(...segments: string[]): string {
@@ -108,6 +116,8 @@ export const AGENTS: AgentConfig[] = [
     skillsDir: '.windsurf/skills',
     rulesDir: '.windsurf/rules',
     rulesFormat: 'windsurf-mdc',
+    userSkillsDir: '.codeium/windsurf/skills',
+    userRulesDir: '.codeium/windsurf/rules',
   },
   {
     id: 'cline',
@@ -138,6 +148,8 @@ export const AGENTS: AgentConfig[] = [
     skillsDir: '.agents/skills',
     rulesDir: '',
     rulesFormat: 'agents-md',
+    userSkillsDir: '.codex/skills',
+    userRulesDir: '.codex',
   },
   {
     id: 'github-copilot',
@@ -148,6 +160,7 @@ export const AGENTS: AgentConfig[] = [
     skillsDir: '.agents/skills',
     rulesDir: '.github',
     rulesFormat: 'copilot-instructions',
+    noUserScope: true,
   },
   {
     id: 'antigravity',
@@ -158,6 +171,8 @@ export const AGENTS: AgentConfig[] = [
     skillsDir: '.agent/skills',
     rulesDir: '',
     rulesFormat: 'agents-md',
+    userSkillsDir: '.antigravity/skills',
+    userRulesDir: '.antigravity',
   },
   {
     id: 'warp',
@@ -168,6 +183,7 @@ export const AGENTS: AgentConfig[] = [
     skillsDir: '.warp/skills',
     rulesDir: '',
     rulesFormat: 'agents-md',
+    userRulesDir: '.warp',
   },
   {
     id: 'gemini-cli',
@@ -178,6 +194,7 @@ export const AGENTS: AgentConfig[] = [
     skillsDir: '.gemini/skills',
     rulesDir: '',
     rulesFormat: 'gemini-md',
+    userRulesDir: '.gemini',
   },
 ];
 

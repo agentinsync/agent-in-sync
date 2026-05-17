@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import ora from 'ora';
 import inquirer from 'inquirer';
-import { AGENTS, type AgentConfig, type AgentType } from '../constants.js';
+import { AGENTS, type AgentConfig, type AgentType, type InstallScope } from '../constants.js';
 import { detectInstalledAgents } from '../utils/detect.js';
 import { discoverSkills, discoverRules, resolveContentRoot } from '../utils/discover.js';
 import { installSkill, installRule } from '../utils/install-content.js';
@@ -10,8 +10,9 @@ import { installSkill, installRule } from '../utils/install-content.js';
 export const installCommand = new Command('install')
   .description('Install AgentInSync skills & rules to a coding agent')
   .option('-a, --agent <agent>', 'Target agent (skip interactive prompt)')
+  .option('-s, --scope <scope>', 'Install scope: user (default) or project')
   .option('-l, --list', 'List available content and detected agents without installing')
-  .action(async (options: { agent?: string; list?: boolean }) => {
+  .action(async (options: { agent?: string; scope?: string; list?: boolean }) => {
     const projectRoot = process.cwd();
     const contentRoot = resolveContentRoot();
 
@@ -73,12 +74,45 @@ export const installCommand = new Command('install')
       agent = AGENTS.find(a => a.id === selectedAgent)!;
     }
 
+    let scope: InstallScope;
+    if (options.scope === 'user' || options.scope === 'project') {
+      scope = options.scope;
+    } else if (options.scope) {
+      console.log(chalk.red(`\nUnknown scope: ${options.scope} (expected 'user' or 'project')`));
+      return;
+    } else {
+      const answer = await inquirer.prompt<{ scope: InstallScope }>([
+        {
+          type: 'list',
+          name: 'scope',
+          message: 'Where should skills & rules be installed?',
+          default: 'user',
+          choices: [
+            { name: 'User level — available in every project (recommended)', value: 'user' },
+            { name: 'Project level — only the current directory', value: 'project' },
+          ],
+        },
+      ]);
+      scope = answer.scope;
+    }
+
     console.log();
     console.log(chalk.bold(`Installing skills & rules to ${agent.name}...`));
     console.log();
 
+    let downgradeNoticeShown = false;
+    const noteScopeDowngrade = (effectiveScope: InstallScope) => {
+      if (scope === 'user' && effectiveScope === 'project' && !downgradeNoticeShown) {
+        console.log(
+          chalk.gray(`  ${agent.name} has no user-level skills/rules — using project scope.`)
+        );
+        downgradeNoticeShown = true;
+      }
+    };
+
     for (const skill of skills) {
-      const result = installSkill(skill, agent, projectRoot);
+      const result = installSkill(skill, agent, projectRoot, scope);
+      noteScopeDowngrade(result.effectiveScope);
       if (result.success) {
         console.log(
           `  ${chalk.green('✔')} Skill: ${chalk.cyan(result.name)} → ${chalk.gray(result.targetPath)}`
@@ -91,7 +125,8 @@ export const installCommand = new Command('install')
     }
 
     for (const rule of rules) {
-      const result = installRule(rule, agent, projectRoot);
+      const result = installRule(rule, agent, projectRoot, scope);
+      noteScopeDowngrade(result.effectiveScope);
       if (result.success) {
         console.log(
           `  ${chalk.green('✔')} Rule: ${chalk.cyan(result.name)} → ${chalk.gray(result.targetPath)}`
