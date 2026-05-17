@@ -5,10 +5,11 @@ import path from 'path';
 import { readFileSync } from 'fs';
 
 const rootPkg = JSON.parse(readFileSync(path.resolve(__dirname, '../../package.json'), 'utf-8'));
+const appVersion = process.env.APP_VERSION || rootPkg.version;
 
 export default defineConfig({
   define: {
-    __APP_VERSION__: JSON.stringify(rootPkg.version),
+    __APP_VERSION__: JSON.stringify(appVersion),
   },
   plugins: [
     TanStackRouterVite({
