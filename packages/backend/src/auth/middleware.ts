@@ -94,10 +94,16 @@ export async function requireOrganization(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const organizationId =
+  const requestedOrgId =
     (req.params.orgId as string | undefined) ||
-    (req.headers['x-organization-id'] as string | undefined) ||
-    req.organizationId;
+    (req.headers['x-organization-id'] as string | undefined);
+
+  if (req.apiKeyId && requestedOrgId && requestedOrgId !== req.organizationId) {
+    res.status(403).json({ error: 'API key is not scoped to this organization' });
+    return;
+  }
+
+  const organizationId = requestedOrgId || req.organizationId;
 
   if (!organizationId) {
     res

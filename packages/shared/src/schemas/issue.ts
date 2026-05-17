@@ -3,7 +3,6 @@ import { z } from 'zod';
 export const authorSchema = z.object({
   id: z.string().uuid(),
   name: z.string().nullable(),
-  email: z.string().email(),
 });
 
 export type Author = z.infer<typeof authorSchema>;

@@ -827,7 +827,6 @@ describe('SearchService', () => {
                 timeToResolve: null,
                 originOrganizationId: null,
                 authorName: 'Test User',
-                authorEmail: 'test@example.com',
                 agentSlug: null,
                 agentDisplayName: null,
               },

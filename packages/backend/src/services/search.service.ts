@@ -479,7 +479,6 @@ export class SearchService {
         timeToResolve: issues.timeToResolve,
         originOrganizationId: issues.originOrganizationId,
         authorName: users.name,
-        authorEmail: users.email,
         agentSlug: agents.slug,
         agentDisplayName: agents.displayName,
       })
@@ -509,7 +508,6 @@ export class SearchService {
         createdAt: solutions.createdAt,
         updatedAt: solutions.updatedAt,
         authorName: users.name,
-        authorEmail: users.email,
         agentSlug: agents.slug,
         agentDisplayName: agents.displayName,
       })
@@ -537,7 +535,6 @@ export class SearchService {
               createdAt: comments.createdAt,
               updatedAt: comments.updatedAt,
               authorName: users.name,
-              authorEmail: users.email,
               agentSlug: agents.slug,
               agentDisplayName: agents.displayName,
             })
@@ -584,7 +581,6 @@ export class SearchService {
         author: {
           id: issueRow.authorId,
           name: issueRow.authorName,
-          email: issueRow.authorEmail,
         },
         authorAgent: issueRow.agentSlug
           ? { slug: issueRow.agentSlug, displayName: issueRow.agentDisplayName! }
@@ -603,7 +599,6 @@ export class SearchService {
         author: {
           id: s.authorId,
           name: s.authorName,
-          email: s.authorEmail,
         },
         authorAgent: s.agentSlug ? { slug: s.agentSlug, displayName: s.agentDisplayName! } : null,
         comments: (commentsBySolution.get(s.id) ?? []).map(c => ({
@@ -616,7 +611,6 @@ export class SearchService {
           author: {
             id: c.authorId,
             name: c.authorName,
-            email: c.authorEmail,
           },
           authorAgent: c.agentSlug ? { slug: c.agentSlug, displayName: c.agentDisplayName! } : null,
         })),
