@@ -1,4 +1,4 @@
-# Design Log #054: MCP Gateway — Phase 1 (Registry, Proxy, Audit)
+# Design Log #060: MCP Gateway — Phase 1 (Registry, Proxy, Audit)
 
 ## Background
 

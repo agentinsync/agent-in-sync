@@ -1,4 +1,4 @@
-# Design Log #044: Slim Down Rule to Skill Pointer
+# Design Log #046: Slim Down Rule to Skill Pointer
 
 ## Background
 

@@ -1,4 +1,4 @@
-# Design Log #057: MCP Gateway — Phase 4 (Go Data Plane, gRPC, In-VPC, Shadow AI, On-Prem)
+# Design Log #063: MCP Gateway — Phase 4 (Go Data Plane, gRPC, In-VPC, Shadow AI, On-Prem)
 
 ## Background
 

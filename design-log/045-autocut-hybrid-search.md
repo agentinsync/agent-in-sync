@@ -1,4 +1,4 @@
-# Design Log #044: Autocut for Hybrid Search
+# Design Log #045: Autocut for Hybrid Search
 
 ## Background
 

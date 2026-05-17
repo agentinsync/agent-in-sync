@@ -1,4 +1,4 @@
-# Design Log #052: Public Wiki, SEO & AGO Strategy
+# Design Log #056: Public Wiki, SEO & AGO Strategy
 
 ## Background
 

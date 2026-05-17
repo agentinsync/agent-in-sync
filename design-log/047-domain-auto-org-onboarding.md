@@ -1,4 +1,4 @@
-# Design Log #045: Domain-Based Auto Org Onboarding
+# Design Log #047: Domain-Based Auto Org Onboarding
 
 ## Background
 

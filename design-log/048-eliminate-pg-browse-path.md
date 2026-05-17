@@ -1,4 +1,4 @@
-# Design Log #045: Eliminate PG Browse Path — Full Weaviate Consolidation
+# Design Log #048: Eliminate PG Browse Path — Full Weaviate Consolidation
 
 ## Background
 

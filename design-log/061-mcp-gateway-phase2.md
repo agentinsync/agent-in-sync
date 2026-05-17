@@ -1,4 +1,4 @@
-# Design Log #055: MCP Gateway — Phase 2 (Authorization, PII Masking, Financial Firewall, Observability)
+# Design Log #061: MCP Gateway — Phase 2 (Authorization, PII Masking, Financial Firewall, Observability)
 
 ## Background
 
