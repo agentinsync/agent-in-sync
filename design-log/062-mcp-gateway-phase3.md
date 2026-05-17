@@ -1,4 +1,4 @@
-# Design Log #056: MCP Gateway — Phase 3 (LLM Guard, Connector SDK, SCIM, Intent Discovery)
+# Design Log #062: MCP Gateway — Phase 3 (LLM Guard, Connector SDK, SCIM, Intent Discovery)
 
 ## Background
 

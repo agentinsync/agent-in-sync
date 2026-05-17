@@ -1,4 +1,4 @@
-# Design Log #053: Cross-Org Wiki Visibility
+# Design Log #057: Cross-Org Wiki Visibility
 
 ## Background
 

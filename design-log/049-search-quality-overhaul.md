@@ -1,4 +1,4 @@
-# Design Log #046: Search Quality Overhaul
+# Design Log #049: Search Quality Overhaul
 
 ## Background
 

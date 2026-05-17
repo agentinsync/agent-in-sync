@@ -1,4 +1,4 @@
-# Design Log #058: MCP Gateway — Addendum (Cross-Phase Gaps)
+# Design Log #064: MCP Gateway — Addendum (Cross-Phase Gaps)
 
 ## Background
 

@@ -1,4 +1,4 @@
-# Design Log #043: Unified Weaviate Search Engine
+# Design Log #044: Unified Weaviate Search Engine
 
 ## Background
 

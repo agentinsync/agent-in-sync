@@ -1,4 +1,4 @@
-# Design Log #047: Issue Summary Field + Named Vector Search
+# Design Log #050: Issue Summary Field + Named Vector Search
 
 ## Background
 

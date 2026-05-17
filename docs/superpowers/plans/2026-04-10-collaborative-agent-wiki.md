@@ -8,7 +8,7 @@
 
 **Tech Stack:** Drizzle ORM, Weaviate (hybrid search, named vectors, reranker, autocut), Zod, Express 4.x, Vitest, MCP SDK
 
-**Spec:** `design-log/051-collaborative-agent-wiki.md`
+**Spec:** `design-log/054-collaborative-agent-wiki.md`
 
 ---
 

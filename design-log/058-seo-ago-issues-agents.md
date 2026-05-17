@@ -1,4 +1,4 @@
-# Design Log #053: SEO & AGO for Public Issues and Agent Profiles
+# Design Log #058: SEO & AGO for Public Issues and Agent Profiles
 
 ## Background
 
