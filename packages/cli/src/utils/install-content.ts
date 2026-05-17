@@ -1,6 +1,7 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { dirname, join } from 'path';
-import type { AgentConfig } from '../constants.js';
+import { homedir } from 'os';
+import { dirname, isAbsolute, join } from 'path';
+import type { AgentConfig, InstallScope } from '../constants.js';
 import type { ParsedRule, ParsedSkill } from './discover.js';
 import { transformRule } from './rule-adapters.js';
 
@@ -10,15 +11,36 @@ interface InstallResult {
   targetPath: string;
   success: boolean;
   error?: string;
+  effectiveScope: InstallScope;
 }
 
-/** Install a single skill to the agent's skills directory */
+function resolveScope(agent: AgentConfig, scope: InstallScope): InstallScope {
+  if (scope === 'user' && agent.noUserScope) return 'project';
+  return scope;
+}
+
+function resolveBase(scope: InstallScope, projectRoot: string): string {
+  return scope === 'user' ? homedir() : projectRoot;
+}
+
+function resolveSkillsDir(agent: AgentConfig, scope: InstallScope): string {
+  return scope === 'user' ? (agent.userSkillsDir ?? agent.skillsDir) : agent.skillsDir;
+}
+
+function resolveRulesDir(agent: AgentConfig, scope: InstallScope): string {
+  return scope === 'user' ? (agent.userRulesDir ?? agent.rulesDir) : agent.rulesDir;
+}
+
 export function installSkill(
   skill: ParsedSkill,
   agent: AgentConfig,
-  projectRoot: string
+  projectRoot: string,
+  scope: InstallScope = 'project'
 ): InstallResult {
-  const targetDir = join(projectRoot, agent.skillsDir, skill.name);
+  const effectiveScope = resolveScope(agent, scope);
+  const base = resolveBase(effectiveScope, projectRoot);
+  const skillsDir = resolveSkillsDir(agent, effectiveScope);
+  const targetDir = join(base, skillsDir, skill.name);
   const targetPath = join(targetDir, 'SKILL.md');
 
   try {
@@ -27,33 +49,41 @@ export function installSkill(
     return {
       type: 'skill',
       name: skill.name,
-      targetPath: relPath(projectRoot, targetPath),
+      targetPath: displayPath(base, targetPath, effectiveScope),
       success: true,
+      effectiveScope,
     };
   } catch (err) {
     return {
       type: 'skill',
       name: skill.name,
-      targetPath: relPath(projectRoot, targetPath),
+      targetPath: displayPath(base, targetPath, effectiveScope),
       success: false,
       error: err instanceof Error ? err.message : 'Unknown error',
+      effectiveScope,
     };
   }
 }
 
-/** Install a single rule to the agent's rules location */
 export function installRule(
   rule: ParsedRule,
   agent: AgentConfig,
-  projectRoot: string
+  projectRoot: string,
+  scope: InstallScope = 'project'
 ): InstallResult {
+  const effectiveScope = resolveScope(agent, scope);
   const transformed = transformRule(rule, agent.rulesFormat);
 
   if (agent.rulesFormat === 'agents-md') {
-    return installToAgentsMd(rule.name, transformed.content, projectRoot);
+    const base = resolveBase(effectiveScope, projectRoot);
+    const rulesDir = resolveRulesDir(agent, effectiveScope);
+    const agentsMdPath = join(base, rulesDir, 'AGENTS.md');
+    return installToAgentsMd(rule.name, transformed.content, agentsMdPath, base, effectiveScope);
   }
 
-  const targetPath = join(projectRoot, agent.rulesDir, transformed.filename);
+  const base = resolveBase(effectiveScope, projectRoot);
+  const rulesDir = resolveRulesDir(agent, effectiveScope);
+  const targetPath = join(base, rulesDir, transformed.filename);
 
   try {
     mkdirSync(dirname(targetPath), { recursive: true });
@@ -61,31 +91,35 @@ export function installRule(
     return {
       type: 'rule',
       name: rule.name,
-      targetPath: relPath(projectRoot, targetPath),
+      targetPath: displayPath(base, targetPath, effectiveScope),
       success: true,
+      effectiveScope,
     };
   } catch (err) {
     return {
       type: 'rule',
       name: rule.name,
-      targetPath: relPath(projectRoot, targetPath),
+      targetPath: displayPath(base, targetPath, effectiveScope),
       success: false,
       error: err instanceof Error ? err.message : 'Unknown error',
+      effectiveScope,
     };
   }
 }
 
-/** Append or replace rule content in AGENTS.md using idempotent markers */
 function installToAgentsMd(
   ruleName: string,
   markedContent: string,
-  projectRoot: string
+  agentsMdPath: string,
+  base: string,
+  effectiveScope: InstallScope
 ): InstallResult {
-  const agentsMdPath = join(projectRoot, 'AGENTS.md');
   const startMarker = `<!-- agent-in-sync:start:${ruleName} -->`;
   const endMarker = `<!-- agent-in-sync:end:${ruleName} -->`;
 
   try {
+    mkdirSync(dirname(agentsMdPath), { recursive: true });
+
     let existing = '';
     if (existsSync(agentsMdPath)) {
       existing = readFileSync(agentsMdPath, 'utf-8');
@@ -96,29 +130,43 @@ function installToAgentsMd(
 
     let updated: string;
     if (startIdx !== -1 && endIdx !== -1) {
-      // Replace existing section
       updated =
         existing.slice(0, startIdx) + markedContent + existing.slice(endIdx + endMarker.length);
     } else {
-      // Append new section
       updated = existing
         ? existing.trimEnd() + '\n\n' + markedContent + '\n'
         : markedContent + '\n';
     }
 
     writeFileSync(agentsMdPath, updated, 'utf-8');
-    return { type: 'rule', name: ruleName, targetPath: 'AGENTS.md', success: true };
+    return {
+      type: 'rule',
+      name: ruleName,
+      targetPath: displayPath(base, agentsMdPath, effectiveScope),
+      success: true,
+      effectiveScope,
+    };
   } catch (err) {
     return {
       type: 'rule',
       name: ruleName,
-      targetPath: 'AGENTS.md',
+      targetPath: displayPath(base, agentsMdPath, effectiveScope),
       success: false,
       error: err instanceof Error ? err.message : 'Unknown error',
+      effectiveScope,
     };
   }
 }
 
-function relPath(base: string, full: string): string {
-  return full.startsWith(base) ? full.slice(base.length + 1) : full;
+function displayPath(base: string, full: string, scope: InstallScope): string {
+  if (!isAbsolute(full)) return full;
+  if (scope === 'user' && full.startsWith(base)) {
+    const rest = full.slice(base.length).replace(/^[/\\]/, '');
+    return rest ? `~/${rest}` : '~';
+  }
+  if (full.startsWith(base)) {
+    const rest = full.slice(base.length).replace(/^[/\\]/, '');
+    return rest || full;
+  }
+  return full;
 }

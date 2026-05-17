@@ -7,6 +7,7 @@ import { authenticateWithBrowser } from '../utils/auth.js';
 import { writeAgentConfig, backupExistingConfig } from '../utils/write-config.js';
 import { discoverSkills, discoverRules, resolveContentRoot } from '../utils/discover.js';
 import { installSkill, installRule } from '../utils/install-content.js';
+import type { InstallScope } from '../constants.js';
 
 export const setupCommand = new Command('setup')
   .description('Set up AgentInSync for your AI coding agents')
@@ -60,6 +61,25 @@ export const setupCommand = new Command('setup')
 
     const agentsToSetup = detectedAgents.filter(a => selectedAgents.includes(a.id));
 
+    const { scope } = await inquirer.prompt<{ scope: InstallScope }>([
+      {
+        type: 'list',
+        name: 'scope',
+        message: 'Where should skills & rules be installed?',
+        default: 'user',
+        choices: [
+          {
+            name: 'User level — available in every project (recommended)',
+            value: 'user',
+          },
+          {
+            name: 'Project level — only the current directory',
+            value: 'project',
+          },
+        ],
+      },
+    ]);
+
     console.log();
     console.log(chalk.bold('Step 1: Authentication'));
     console.log(chalk.gray('Opening browser for login...'));
@@ -92,6 +112,7 @@ export const setupCommand = new Command('setup')
     const results: {
       agent: DetectedAgent;
       mcpSuccess: boolean;
+      mcpAlreadyExisted: boolean;
       mcpError?: string;
       backupPath?: string | null;
       contentInstalled: { type: string; name: string; targetPath: string; ok: boolean }[];
@@ -106,11 +127,23 @@ export const setupCommand = new Command('setup')
       }
 
       const isUiOnly = agent.configFormat === 'ui-only';
-      const mcpResult = isUiOnly ? { success: true } : writeAgentConfig(agent, authResult.apiKey);
+      const mcpResult = isUiOnly
+        ? { success: true, alreadyExisted: false }
+        : writeAgentConfig(agent, authResult.apiKey);
+      const mcpAlreadyExisted = mcpResult.success && mcpResult.alreadyExisted === true;
 
       if (isUiOnly) {
         console.log(
           `    ${chalk.yellow('⚠')} MCP config — ${chalk.yellow(`${agent.name} requires manual setup via its IDE UI`)}`
+        );
+      } else if (mcpAlreadyExisted) {
+        console.log(
+          `    ${chalk.yellow('⚠')} MCP config — ${chalk.yellow('agent-in-sync already configured; keeping existing entry')}`
+        );
+        console.log(
+          chalk.gray(
+            '      To replace it, run: claude mcp remove agent-in-sync --scope user, then re-run setup.'
+          )
         );
       } else if (mcpResult.success) {
         const target = agent.configPath || 'claude mcp add ...';
@@ -125,8 +158,19 @@ export const setupCommand = new Command('setup')
       const contentInstalled: { type: string; name: string; targetPath: string; ok: boolean }[] =
         [];
 
+      let downgradeNoticeShown = false;
+      const noteScopeDowngrade = (effectiveScope: InstallScope) => {
+        if (scope === 'user' && effectiveScope === 'project' && !downgradeNoticeShown) {
+          console.log(
+            chalk.gray(`      ${agent.name} has no user-level skills/rules — using project scope.`)
+          );
+          downgradeNoticeShown = true;
+        }
+      };
+
       for (const skill of skills) {
-        const r = installSkill(skill, agent, projectRoot);
+        const r = installSkill(skill, agent, projectRoot, scope);
+        noteScopeDowngrade(r.effectiveScope);
         contentInstalled.push({
           type: 'Skill',
           name: r.name,
@@ -143,7 +187,8 @@ export const setupCommand = new Command('setup')
       }
 
       for (const rule of rules) {
-        const r = installRule(rule, agent, projectRoot);
+        const r = installRule(rule, agent, projectRoot, scope);
+        noteScopeDowngrade(r.effectiveScope);
         contentInstalled.push({
           type: 'Rule',
           name: r.name,
@@ -163,6 +208,7 @@ export const setupCommand = new Command('setup')
       results.push({
         agent,
         mcpSuccess: mcpResult.success,
+        mcpAlreadyExisted,
         mcpError: mcpResult.error,
         backupPath,
         contentInstalled,
@@ -177,7 +223,8 @@ export const setupCommand = new Command('setup')
       console.log();
       console.log('AgentInSync is now connected to:');
       successful.forEach(r => {
-        console.log(`  ${chalk.cyan('✓')} ${r.agent.name}`);
+        const note = r.mcpAlreadyExisted ? chalk.gray(' (MCP already configured)') : '';
+        console.log(`  ${chalk.cyan('✓')} ${r.agent.name}${note}`);
       });
       console.log();
       console.log(chalk.gray('Restart your agents to load the new configuration.'));

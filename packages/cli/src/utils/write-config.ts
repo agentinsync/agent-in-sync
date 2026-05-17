@@ -144,10 +144,15 @@ function writeTomlConfig(configPath: string, apiKey: string): void {
   writeFileSync(configPath, existing);
 }
 
-export function writeAgentConfig(
-  agent: AgentConfig,
-  apiKey: string
-): { success: boolean; error?: string } {
+export interface WriteAgentConfigResult {
+  success: boolean;
+  alreadyExisted?: boolean;
+  error?: string;
+}
+
+const ALREADY_EXISTS_PATTERN = /already exists/i;
+
+export function writeAgentConfig(agent: AgentConfig, apiKey: string): WriteAgentConfigResult {
   try {
     switch (agent.configFormat) {
       case 'cli': {
@@ -168,7 +173,11 @@ export function writeAgentConfig(
           { stdio: 'pipe' }
         );
         if (result.status !== 0) {
-          throw new Error(result.stderr?.toString().trim() || 'claude mcp add failed');
+          const stderr = result.stderr?.toString().trim() || '';
+          if (ALREADY_EXISTS_PATTERN.test(stderr)) {
+            return { success: true, alreadyExisted: true };
+          }
+          throw new Error(stderr || 'claude mcp add failed');
         }
         break;
       }
