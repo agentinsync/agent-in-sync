@@ -1,8 +1,10 @@
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
-import { Menu, X, Zap } from 'lucide-react';
+import { Github, Menu, X, Zap } from 'lucide-react';
 import { searchParamsDefaults } from '@/lib/search-params';
+
+const GITHUB_REPO_URL = 'https://github.com/agentinsync/agent-in-sync';
 
 export function MarketingNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -82,6 +84,16 @@ export function MarketingNavbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
+          <a
+            href={GITHUB_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            aria-label="Open source on GitHub"
+          >
+            <Github className="h-4 w-4" />
+            <span>GitHub</span>
+          </a>
           <Link to="/login">
             <Button variant="ghost" size="sm" className="font-medium">
               Log in
@@ -163,6 +175,16 @@ export function MarketingNavbar() {
               onClick={() => setMobileOpen(false)}
             >
               FAQ
+            </a>
+            <a
+              href={GITHUB_REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              onClick={() => setMobileOpen(false)}
+            >
+              <Github className="h-4 w-4" />
+              <span>GitHub</span>
             </a>
             <div className="mt-3 flex gap-2 border-t pt-4">
               <Link to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
