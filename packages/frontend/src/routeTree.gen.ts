@@ -18,6 +18,7 @@ import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedWikiBrowseRouteImport } from './routes/_protected.wiki-browse'
+import { Route as ProtectedWelcomeRouteImport } from './routes/_protected.welcome'
 import { Route as ProtectedSuperAdminRouteImport } from './routes/_protected.super-admin'
 import { Route as ProtectedShareRequestsRouteImport } from './routes/_protected.share-requests'
 import { Route as ProtectedSettingsRouteImport } from './routes/_protected.settings'
@@ -106,6 +107,11 @@ const IndexRoute = IndexRouteImport.update({
 const ProtectedWikiBrowseRoute = ProtectedWikiBrowseRouteImport.update({
   id: '/wiki-browse',
   path: '/wiki-browse',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedWelcomeRoute = ProtectedWelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
   getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedSuperAdminRoute = ProtectedSuperAdminRouteImport.update({
@@ -389,6 +395,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof ProtectedSettingsRoute
   '/share-requests': typeof ProtectedShareRequestsRoute
   '/super-admin': typeof ProtectedSuperAdminRouteWithChildren
+  '/welcome': typeof ProtectedWelcomeRoute
   '/wiki-browse': typeof ProtectedWikiBrowseRouteWithChildren
   '/explore/agents': typeof MarketingExploreAgentsRouteWithChildren
   '/agents/$slug': typeof ProtectedAgentsSlugRoute
@@ -441,6 +448,7 @@ export interface FileRoutesByTo {
   '/search': typeof ProtectedSearchRoute
   '/settings': typeof ProtectedSettingsRoute
   '/share-requests': typeof ProtectedShareRequestsRoute
+  '/welcome': typeof ProtectedWelcomeRoute
   '/agents/$slug': typeof ProtectedAgentsSlugRoute
   '/issues/$id': typeof ProtectedIssuesIdRoute
   '/org-settings/$slug': typeof ProtectedOrgSettingsSlugRoute
@@ -497,6 +505,7 @@ export interface FileRoutesById {
   '/_protected/settings': typeof ProtectedSettingsRoute
   '/_protected/share-requests': typeof ProtectedShareRequestsRoute
   '/_protected/super-admin': typeof ProtectedSuperAdminRouteWithChildren
+  '/_protected/welcome': typeof ProtectedWelcomeRoute
   '/_protected/wiki-browse': typeof ProtectedWikiBrowseRouteWithChildren
   '/_marketing/explore_/agents': typeof MarketingExploreAgentsRouteWithChildren
   '/_protected/agents/$slug': typeof ProtectedAgentsSlugRoute
@@ -554,6 +563,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/share-requests'
     | '/super-admin'
+    | '/welcome'
     | '/wiki-browse'
     | '/explore/agents'
     | '/agents/$slug'
@@ -606,6 +616,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/settings'
     | '/share-requests'
+    | '/welcome'
     | '/agents/$slug'
     | '/issues/$id'
     | '/org-settings/$slug'
@@ -661,6 +672,7 @@ export interface FileRouteTypes {
     | '/_protected/settings'
     | '/_protected/share-requests'
     | '/_protected/super-admin'
+    | '/_protected/welcome'
     | '/_protected/wiki-browse'
     | '/_marketing/explore_/agents'
     | '/_protected/agents/$slug'
@@ -769,6 +781,13 @@ declare module '@tanstack/react-router' {
       path: '/wiki-browse'
       fullPath: '/wiki-browse'
       preLoaderRoute: typeof ProtectedWikiBrowseRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/welcome': {
+      id: '/_protected/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof ProtectedWelcomeRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_protected/super-admin': {
@@ -1262,6 +1281,7 @@ interface ProtectedRouteChildren {
   ProtectedSettingsRoute: typeof ProtectedSettingsRoute
   ProtectedShareRequestsRoute: typeof ProtectedShareRequestsRoute
   ProtectedSuperAdminRoute: typeof ProtectedSuperAdminRouteWithChildren
+  ProtectedWelcomeRoute: typeof ProtectedWelcomeRoute
   ProtectedWikiBrowseRoute: typeof ProtectedWikiBrowseRouteWithChildren
   ProtectedIssuesIdRoute: typeof ProtectedIssuesIdRoute
   ProtectedOrgSettingsSlugRoute: typeof ProtectedOrgSettingsSlugRoute
@@ -1282,6 +1302,7 @@ const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedSettingsRoute: ProtectedSettingsRoute,
   ProtectedShareRequestsRoute: ProtectedShareRequestsRoute,
   ProtectedSuperAdminRoute: ProtectedSuperAdminRouteWithChildren,
+  ProtectedWelcomeRoute: ProtectedWelcomeRoute,
   ProtectedWikiBrowseRoute: ProtectedWikiBrowseRouteWithChildren,
   ProtectedIssuesIdRoute: ProtectedIssuesIdRoute,
   ProtectedOrgSettingsSlugRoute: ProtectedOrgSettingsSlugRoute,

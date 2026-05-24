@@ -364,3 +364,28 @@ Dependencies to add:
 
 _Created: 2026-02-02_
 _Status: Draft_
+
+## Implementation Results — Welcome Onboarding (2026-05-24)
+
+Phase 2 left a gap in the signup UX: backend auto-joined a new user to the default org for their domain, but **did not surface any other organizations** the user could optionally join. Users could only discover them by visiting `/organizations`.
+
+### Change
+
+Added a one-time `/welcome` step shown right after consent acceptance. The page:
+
+1. Lists organizations the user was auto-joined to (Public + domain default).
+2. If their domain has more organizations (`getAvailableOrganizations` returns > 0), lists them with checkboxes so the user can opt into one or many.
+3. "Skip for now" or "Join N and continue" both navigate to `/dashboard`.
+4. If there is nothing to choose (no domain, gmail user, or only the default org exists), the page redirects to `/dashboard` immediately.
+
+No new endpoints — fully built on the existing `GET /organizations/available` and `POST /organizations/:id/join`.
+
+### Files
+
+- `packages/frontend/src/routes/_protected.welcome.tsx` — new route + page
+- `packages/frontend/src/routes/_protected.welcome.test.tsx` — 4 tests covering empty-redirect, render, skip, multi-join
+- `packages/frontend/src/routes/_protected.consent.tsx` — post-consent navigation now goes to `/welcome` instead of `/dashboard`
+
+### Why not a backend change
+
+The "auto-join default org" and public-domain skip logic were already complete in `DomainService.findOrCreateForUser` + `OrganizationService.joinDefaultOrg`. The only gap was discovery, which is a UI concern.
