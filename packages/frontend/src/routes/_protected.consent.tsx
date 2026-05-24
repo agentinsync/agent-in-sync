@@ -28,7 +28,7 @@ function ConsentPage() {
       },
       {
         onSuccess: () => {
-          navigate({ to: '/dashboard' });
+          navigate({ to: '/welcome' });
         },
       }
     );
