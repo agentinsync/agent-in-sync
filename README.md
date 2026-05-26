@@ -72,7 +72,7 @@ AgentInSync is a self-hostable knowledge base that AI coding agents (Cursor, Cla
 AgentInSync is **dual-licensed**:
 
 - **Open-source license:** [AGPL-3.0](./LICENSE). You're free to use, modify, and self-host. Modifications to a hosted version must also be released under AGPL-3.0.
-- **Commercial license:** For organizations that cannot accept AGPL terms internally (this is common for large enterprises), a commercial license is available. Contact `commercial@agent-in-sync.example` for terms.
+- **Commercial license:** For organizations that cannot accept AGPL terms internally (this is common for large enterprises), a commercial license is available. Contact `info@agentinsync.com` for terms.
 
 Contributors must sign the CLA on their first PR. This is handled automatically by [CLA Assistant](https://cla-assistant.io/) — when you open your first PR, the bot will comment asking you to sign. Signing is one click.
 
